@@ -1,0 +1,19 @@
+body {
+    background: $primary-color-dark;
+    color: $primary-color-text;
+
+    font-family: Roboto, sans-serif;
+    font-weight: 400;
+}
+
+h1 {
+    font-family: Raleway, sans-serif;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-top: $gutter-width * 2;
+    @include paper-text;
+
+    @media #{map_get($bps, sm)} {
+        font-size: 3rem;
+    }
+}

@@ -1,0 +1,80 @@
+
+$columns: 12;
+$gutter-width: 10px;
+
+$bps: (
+    xs: '(max-width: 543px)',
+    sm: '(min-width: 544px)',
+    md: '(min-width: 768px)',
+    lg: '(min-width: 992px)',
+    xl: '(min-width: 1200px)'
+);
+
+$prefs:  (
+    xs: (
+        w: 100%,
+        qs: (xs, sm, md, lg, xl)
+    ),
+    sm: (
+        w: 544px,
+        qs: (sm, md, lg, xl)
+    ),
+    md: (
+
+        w: 768px,
+        qs: (md, lg, xl)
+    ),
+    lg: (
+        w: 960px,
+        qs: (lg, xl)
+    ),
+    xl: (
+        w: 960px,
+        qs: (xl)
+
+    )
+);
+
+.container {
+
+    margin: 0 auto;
+
+    @each $bp, $query in $bps {
+        @media #{$query} {
+            width: #{map-get(map-get($prefs, $bp), w)}
+        }
+    }
+
+    .row {
+
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+
+        [class*="col-"] {
+            margin-left: $gutter-width !important;
+            margin-right: $gutter-width !important;
+            min-height: 1px;
+            box-sizing: border-box;
+        }
+
+        @each $bp, $_ in $bps {
+            @each $_bp in map-get(map-get($prefs, $bp), qs) {
+                @media #{map-get($bps, $_bp)} {
+                    @for $i from 1 to $columns + 1 {
+                        .col-#{$bp}-#{$i} {
+                            @if ($_bp == xs) {
+                                width: calc(100% - #{$gutter-width} * 2);
+                            } @else {
+                                width: calc(100% / #{$columns} * #{$i} - #{$gutter-width} * 2);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+    }
+
+}

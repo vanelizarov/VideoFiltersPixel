@@ -1,0 +1,42 @@
+.button {
+    display: block;
+    height: $button-height;
+    cursor: pointer;
+    @include paper;
+
+    @media #{map_get($bps, xs)} {
+        height: 40px;
+    }
+
+    &.button-snapshot {
+        background: $red-color;
+        width: $button-height;
+        border-radius: 50%;
+        position: absolute;
+        transform: translateX(-50%);
+        left: 50%;
+        bottom: $gutter-width * 4;
+
+        &:hover {
+            background: $dark-red-color;
+
+            .icon {
+                fill: $primary-color-light;
+            }
+        }
+
+        @media #{map_get($bps, xs)} {
+            width: 40px;
+        }
+    }
+
+    &.button-filter {
+        background: $primary-color;
+        margin-bottom: $gutter-width;
+
+        &:hover {
+            background: $accent-color;
+        }
+    }
+
+}
