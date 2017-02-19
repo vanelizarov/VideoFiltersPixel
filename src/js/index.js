@@ -43,7 +43,7 @@ const drawStream = () => {
                 imageData = grayscale(imageData);
                 break;
             default:
-                imageData = chromakey(imageData);
+                //imageData = chromakey(imageData);
                 break;
         }
 
