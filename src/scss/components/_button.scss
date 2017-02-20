@@ -34,9 +34,10 @@
         background: $primary-color;
         margin-bottom: $gutter-width;
 
-        &:hover {
+        &:hover, &.active {
             background: $accent-color;
         }
+
     }
 
 }

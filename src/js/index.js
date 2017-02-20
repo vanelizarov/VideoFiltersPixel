@@ -1,13 +1,11 @@
 require('webrtc-adapter');
-
-import {sepia, invert, grayscale, chromakey} from './filters';
-
+import {sepia, invert, grayscale} from './filters';
 
 //
 //  DOM elements
 //
 
-let currentFilter = '';
+let currentFilter = null;
 
 const virtualVideo = window.video = document.getElementById('virtual-video');
 const cameraView = document.getElementById('camera-view');
@@ -18,7 +16,10 @@ const snapshotButton = document.querySelector('button.button-snapshot');
 
 const constraints = {
     audio: false,
-    video: true
+    video: {
+        width: 1280,
+        facingMode: 'user'
+    }
 };
 
 //
@@ -43,7 +44,6 @@ const drawStream = () => {
                 imageData = grayscale(imageData);
                 break;
             default:
-                //imageData = chromakey(imageData);
                 break;
         }
 
@@ -51,6 +51,30 @@ const drawStream = () => {
     }, 33);
 
 };
+
+//
+//  Event listeners
+//
+
+filterButtons.forEach((b) => {
+    b.addEventListener('click', (e) => {
+        currentFilter = e.target.id;
+        filterButtons.forEach((_b) => {
+            _b.classList.remove('active');
+        });
+        e.target.classList.add('active');
+    });
+});
+
+snapshotButton.addEventListener('click', () => {
+    snapshotView.src = cameraView.toDataURL('png');
+});
+
+virtualVideo.addEventListener('canplay', () => {
+    cameraView.width = getComputedStyle(virtualVideo, null).width.replace('px', '');
+    cameraView.height = getComputedStyle(virtualVideo, null).height.replace('px', '');
+    document.getElementById('no-filter').classList.add('active');
+});
 
 //
 //  Callbacks for getUserMedia()
@@ -63,28 +87,13 @@ const onMediaStream = (stream) => {
 };
 
 const onNoMediaStream = (error) => {
-    console.log(`No media stream, ${error}`);
+    let errStr = `${error}`;
+    console.log(errStr);
+    alert(errStr);
 };
 
-navigator.mediaDevices.getUserMedia(constraints)
-                        .then(onMediaStream)
-                        .catch(onNoMediaStream);
-
 //
-//  Event listeners
+//  Entry point
 //
 
-filterButtons.forEach((b) => {
-    b.addEventListener('click', (e) => {
-        currentFilter = e.target.id;
-    });
-});
-
-snapshotButton.addEventListener('click', () => {
-    snapshotView.src = cameraView.toDataURL('png');
-});
-
-virtualVideo.addEventListener('canplay', () => {
-    cameraView.width = getComputedStyle(virtualVideo, null).width.replace('px', '');
-    cameraView.height = getComputedStyle(virtualVideo, null).height.replace('px', '');
-});
+navigator.mediaDevices.getUserMedia(constraints).then(onMediaStream).catch(onNoMediaStream);
