@@ -2,6 +2,8 @@
 
 Client application for applying simple filters to video stream pixel by pixel
 
+Version with SVG filters: https://github.com/vanelizarov/video-filters
+
 ## Setup
 
 * Clone repository
